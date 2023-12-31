@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-
 	"github.com/andersonigorf/goexpert-clean-architecture/internal/entity"
 )
 
@@ -33,4 +32,23 @@ func (r *OrderRepository) GetTotal() (int, error) {
 		return 0, err
 	}
 	return total, nil
+}
+
+func (r *OrderRepository) FindAll() ([]entity.Order, error) {
+	var orders []entity.Order
+
+	rows, err := r.Db.Query("SELECT id, price, tax, final_price FROM orders")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var o entity.Order
+		if err := rows.Scan(&o.ID, &o.Price, &o.Tax, &o.FinalPrice); err != nil {
+			return nil, err
+		}
+		orders = append(orders, o)
+	}
+	return orders, nil
 }
