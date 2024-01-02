@@ -19,4 +19,8 @@ proto:
 evans:
 	evans --host localhost --port 50051 -r repl
 
-.PHONY: createmigration migrate migratedown proto evans
+gqlgen:
+	go run github.com/99designs/gqlgen generate
+
+
+.PHONY: createmigration migrate migratedown proto evans gqlgen
